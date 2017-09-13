@@ -3,6 +3,17 @@
 #include <cppad/ipopt/solve.hpp>
 #include "Eigen-3.3/Eigen/Core"
 
+
+#define REF_V 100
+#define W_CTE 500
+#define W_EPSI 100
+#define W_V 10
+#define W_DELTA 200
+#define W_A 20
+#define W_DELTA_A 350
+#define W_D_DELTA 1
+#define W_D_A 1
+
 using CppAD::AD;
 
 // TODO: Set the timestep length and duration
@@ -20,7 +31,7 @@ double dt = 0.1;
 //
 // This is the length from front to CoG that has a similar radius.
 const double Lf = 2.67;
-double ref_v = 80;
+double ref_v = 100;
 size_t x_start = 0;
 size_t y_start = x_start + N;
 size_t psi_start = y_start + N;
@@ -51,19 +62,19 @@ class FG_eval {
     // TODO: Define the cost related the reference state and
     // any anything you think may be beneficial.
     for (int t = 0; t < N; t++) {
-      fg[0] += 20*CppAD::pow(vars[cte_start + t], 2);
-      fg[0] += 5*CppAD::pow(vars[epsi_start + t], 2);
-      fg[0] += 5*CppAD::pow(vars[v_start + t] - ref_v, 2);
+      fg[0] += W_CTE*CppAD::pow(vars[cte_start + t], 2);
+      fg[0] += W_EPSI*CppAD::pow(vars[epsi_start + t], 2);
+      fg[0] += W_V*CppAD::pow(vars[v_start + t] - REF_V, 2);
     }
     for (int t = 0; t < N - 1; t++) {
-      fg[0] += 50000*CppAD::pow(vars[delta_start + t], 2);
-      fg[0] += 10*CppAD::pow(vars[a_start + t], 2);
-      // fg[0] += 1*CppAD::pow(vars[delta_start + t] * vars[v_start+t], 2);
+      fg[0] += W_DELTA*CppAD::pow(vars[delta_start + t], 2);
+      fg[0] += W_A*CppAD::pow(vars[a_start + t], 2);
+      fg[0] += W_DELTA_A*CppAD::pow(vars[delta_start + t] * vars[v_start+t], 2);
       
     }
     for (int t = 0; t < N - 2; t++) {
-      fg[0] += 1*CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
-      fg[0] += 1*CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
+      fg[0] += W_D_DELTA*CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
+      fg[0] += W_D_A*CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
     }
     //
     // Setup Constraints
