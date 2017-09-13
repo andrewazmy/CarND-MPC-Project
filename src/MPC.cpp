@@ -51,14 +51,14 @@ class FG_eval {
         // TODO: Define the cost related the reference state and
         // any anything you think may be beneficial.
         for (int t = 0; t < N; t++) {
-          fg[0] += 1*CppAD::pow(vars[cte_start + t], 2);
-          fg[0] += 1*CppAD::pow(vars[epsi_start + t], 2);
-          fg[0] += 1*CppAD::pow(vars[v_start + t] - ref_v, 2);
+          fg[0] += 20*CppAD::pow(vars[cte_start + t], 2);
+          fg[0] += 5*CppAD::pow(vars[epsi_start + t], 2);
+          fg[0] += 4*CppAD::pow(vars[v_start + t] - ref_v, 2);
         }
         for (int t = 0; t < N - 1; t++) {
-          fg[0] += 1*CppAD::pow(vars[delta_start + t], 2);
-          fg[0] += 1*CppAD::pow(vars[a_start + t], 2);
-          fg[0] += 1*CppAD::pow(vars[delta_start + t] * vars[v_start+t], 2);
+          fg[0] += 50000*CppAD::pow(vars[delta_start + t], 2);
+          fg[0] += 10*CppAD::pow(vars[a_start + t], 2);
+          // fg[0] += 1*CppAD::pow(vars[delta_start + t] * vars[v_start+t], 2);
           
         }
         for (int t = 0; t < N - 2; t++) {
