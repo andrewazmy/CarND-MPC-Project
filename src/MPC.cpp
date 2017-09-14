@@ -10,7 +10,7 @@
 #define W_V 10
 #define W_DELTA 200
 #define W_A 20
-#define W_DELTA_A 350
+#define W_DELTA_V 350
 #define W_D_DELTA 1
 #define W_D_A 1
 
@@ -69,7 +69,7 @@ class FG_eval {
     for (int t = 0; t < N - 1; t++) {
       fg[0] += W_DELTA*CppAD::pow(vars[delta_start + t], 2);
       fg[0] += W_A*CppAD::pow(vars[a_start + t], 2);
-      fg[0] += W_DELTA_A*CppAD::pow(vars[delta_start + t] * vars[v_start+t], 2);
+      fg[0] += W_DELTA_V*CppAD::pow(vars[delta_start + t] * vars[v_start+t], 2);
       
     }
     for (int t = 0; t < N - 2; t++) {
