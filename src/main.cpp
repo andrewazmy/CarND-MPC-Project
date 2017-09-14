@@ -119,18 +119,17 @@ int main() {
           double cte = coeffs[0];
           double epsi = -atan(coeffs[1]);
 
-          // Eigen::VectorXd state(6);
-          // state << 0, 0, 0, v, cte, epsi;
-          const double dt = 0.1;
-          const double Lf = 2.67;
-          const double px_act = v * dt;
-          const double py_act = 0;
-          const double psi_act = - v * steer_value * dt / Lf;
-          const double v_act = v + throttle_value * dt;
-          const double cte_act = cte + v * sin(epsi) * dt;
-          const double epsi_act = epsi + psi_act; 
+
+          double dt = 0.1;
+          double Lf = 2.67;
+          double px_pred = v * dt;
+          double py_pred = 0;
+          double psi_pred = - v * steer_value * dt / Lf;
+          double v_pred = v + throttle_value * dt;
+          double cte_pred = cte + v * sin(epsi) * dt;
+          double epsi_pred = epsi + psi_pred; 
           Eigen::VectorXd state(6);
-          state << px_act, py_act, psi_act, v_act, cte_act, epsi_act;
+          state << px_pred, py_pred, psi_pred, v_pred, cte_pred, epsi_pred;
 
           auto vars = mpc.Solve(state, coeffs);
           steer_value = vars[0];
